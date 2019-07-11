@@ -8,6 +8,7 @@ https://github.com/0xJoey/Arduino_93C46
 ---
 
 # Interface
+
 It look like SPI.   
 But CS is ACTIVE HIGH.   
 And data bit is not always 8bit.   
