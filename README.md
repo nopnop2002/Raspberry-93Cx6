@@ -87,13 +87,16 @@ __u16 eeprom_read(struct eeprom *e, __u16 addr);
 
 # 93C46
 ![93C46-BYTE](https://user-images.githubusercontent.com/6020549/61050500-1a623d80-a422-11e9-82ad-d5a35fd970b2.jpg)
+
 ![93C46-WORD](https://user-images.githubusercontent.com/6020549/61050499-1a623d80-a422-11e9-98d7-4397111388d4.jpg)
 
 # 93C56
 ![93C56-BYTE](https://user-images.githubusercontent.com/6020549/61050528-2cdc7700-a422-11e9-85e2-3d3f18f0adc0.jpg)
+
 ![93C56-WORD](https://user-images.githubusercontent.com/6020549/61050527-2cdc7700-a422-11e9-861f-92315ff3e916.jpg)
 
 #93C66
 ![93C66-BYTE](https://user-images.githubusercontent.com/6020549/61050568-441b6480-a422-11e9-9db8-b84fe4faebac.jpg)
+
 ![93C66-WORD](https://user-images.githubusercontent.com/6020549/61050569-441b6480-a422-11e9-8897-1637ee88b8cd.jpg)
 
