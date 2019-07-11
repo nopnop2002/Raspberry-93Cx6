@@ -2,8 +2,7 @@
 
 Three-Wire Serial EEPROM Access Library for RaspberryPi.   
 
-I used this as a reference.
-https://github.com/0xJoey/Arduino_93C46   
+I used [this](https://github.com/0xJoey/Arduino_93C46) as a reference.
 
 ---
 
