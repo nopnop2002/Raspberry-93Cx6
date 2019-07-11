@@ -7,6 +7,13 @@ https://github.com/0xJoey/Arduino_93C46
 
 ---
 
+# Interface
+It look like SPI.   
+But CS is ACTIVE HIGH.   
+And data bit is not always 8bit.   
+
+---
+
 # Memory size vs Organization
 
 The 93Cx6 memory is organized either as bytes (x8) or as words (x16).   
