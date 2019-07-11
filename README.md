@@ -13,7 +13,7 @@ The 93Cx6 memory is organized either as bytes (x8) or as words (x16).
 If Organization Select (ORG) is left unconnected (or connected to VCC) the x16 organization is selected.   
 When Organization Select (ORG) is connected to Ground (VSS) the x8 organization is selected.    
 
-|Device|Number of Bits|Number of 8-bit Buyes|Number of 16-bit Words|
+|Device|Number of Bits|Number of 8-bit Bytes|Number of 16-bit Words|
 |:---|:---|:---|:---|
 |93C46|1024|128|64|
 |93C56|2048|256|128|
