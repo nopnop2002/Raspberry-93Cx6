@@ -85,6 +85,10 @@ __u16 eeprom_read(struct eeprom *e, __u16 addr);
 # Wireing for x16 Organization
 ![Wire-93cx6-word](https://user-images.githubusercontent.com/6020549/61050458-00c0f600-a422-11e9-9720-1d12b4431962.jpg)
 
+**It's insufficient in 3.3V Power supply.**
+**You have to supply 5V.**
+**So you have to shift level about MISO line.**
+
 ---
 
 # 93C46
