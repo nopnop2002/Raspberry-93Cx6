@@ -46,6 +46,7 @@ sudo ./main
 
 # API
 
+```
 // Open Memory Device
 // model:EEPROM model(46/56/66/76/86)
 // org:Organization Select(1=8Bit/2=16Bit)
@@ -74,6 +75,7 @@ void eeprom_write(struct eeprom *e, __u16 addr, __u16 value);
 
 // Read Data from Memory
 __u16 eeprom_read(struct eeprom *e, __u16 addr);
+```
 
 ---
 
