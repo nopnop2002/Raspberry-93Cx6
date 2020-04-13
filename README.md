@@ -66,7 +66,7 @@ void eeprom_ew_enable(struct eeprom *e);
 void eeprom_ew_disable(struct eeprom *e);
 
 // Check Erase/Write Enable
-bool eeprom_93C46::is_ew_enabled(struct eeprom *e);
+bool eeprom_is_ew_enabled(struct eeprom *e);
 
 // Erase All Memory
 void eeprom_erase_all(struct eeprom *e);
