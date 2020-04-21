@@ -87,10 +87,10 @@ uint16_t eeprom_read(struct eeprom *e, uint16_t addr)
 ---
 
 # Wireing for x8 Organization
-![Wire-93cx6-byte](https://user-images.githubusercontent.com/6020549/61050459-00c0f600-a422-11e9-943b-50631bbef387.jpg)
+![Raspberry-93cx6-byte](https://user-images.githubusercontent.com/6020549/79814750-06d50180-83ba-11ea-891c-c604fa2e69aa.jpg)
 
 # Wireing for x16 Organization
-![Wire-93cx6-word](https://user-images.githubusercontent.com/6020549/61050458-00c0f600-a422-11e9-9720-1d12b4431962.jpg)
+![Raspberry-93cx6-word](https://user-images.githubusercontent.com/6020549/79814843-308e2880-83ba-11ea-81c3-a4874460ef1d.jpg)
 
 **It's insufficient in 3.3V Power supply.**   
 **You have to supply 5V.**   
