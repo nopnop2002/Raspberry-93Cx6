@@ -31,186 +31,186 @@ enum CC { // Control Codes
 // Open Memory Device
 // model:EEPROM model(46/56/66/76/86)
 // org:Organization Select(1=8Bit/2=16Bit)
-int eeprom_open(int model, int org, int pCS, int pSK, int pDI, int pDO, struct eeprom * e)
+int eeprom_open(int model, int org, int pCS, int pSK, int pDI, int pDO, struct eeprom * dev)
 {
 	pinMode(pCS, OUTPUT);	// ChipSelect
 	pinMode(pSK, OUTPUT);	// Clock
 	pinMode(pDI, OUTPUT); 	// MOSI
 	pinMode(pDO, INPUT);	// MISO
-	digitalWrite(e->_pCS, LOW);
-	e->_pCS = pCS;
-	e->_pSK = pSK;
-	e->_pDI = pDI;
-	e->_pDO = pDO;
-	e->_ew = false;
-	e->_org = org;
-	e->_model = model;
-	e->_bytes = getBytesByModel(e->_org, e->_model);
-	e->_addr = getAddrByModel(e->_org, e->_model);
-	e->_mask = getMaskByModel(e->_org, e->_model);
-	if(_DEBUG_) printf("e->_bytes=%d e->_addr=%d e->_mask=%x\n", e->_bytes, e->_addr, e->_mask);
-	return e->_bytes;
+	digitalWrite(dev->_pCS, LOW);
+	dev->_pCS = pCS;
+	dev->_pSK = pSK;
+	dev->_pDI = pDI;
+	dev->_pDO = pDO;
+	dev->_ew = false;
+	dev->_org = org;
+	dev->_model = model;
+	dev->_bytes = getBytesByModel(dev->_org, dev->_model);
+	dev->_addr = getAddrByModel(dev->_org, dev->_model);
+	dev->_mask = getMaskByModel(dev->_org, dev->_model);
+	if(_DEBUG_) printf("dev->_bytes=%d dev->_addr=%d dev->_mask=%x\n", dev->_bytes, dev->_addr, dev->_mask);
+	return dev->_bytes;
 };
 
 
 // Erase/Write Enable
 // Required Clock Cycle : 9-13
-void eeprom_ew_enable(struct eeprom *e)
+void eeprom_ew_enable(struct eeprom *dev)
 {
-	digitalWrite(e->_pCS, HIGH);
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	//uint16_t value = CONTROL<<e->_addr | EW_ENABLE<<(e->_addr-2);
+	send_bits(dev, HIGH, 1);
+	//uint16_t value = CONTROL<<dev->_addr | EW_ENABLE<<(dev->_addr-2);
 	//printf("eeprom_ew_enable value=%04x\n", value); 
-	send_bits(e, CONTROL<<e->_addr | EW_ENABLE<<(e->_addr-2), e->_addr + 2);
-	digitalWrite(e->_pCS, LOW);
-	e->_ew = true;
+	send_bits(dev, CONTROL<<dev->_addr | EW_ENABLE<<(dev->_addr-2), dev->_addr + 2);
+	digitalWrite(dev->_pCS, LOW);
+	dev->_ew = true;
 };
 
 // Erase/Write Disable
 // Required Clock Cycle : 9-13
-void eeprom_ew_disable(struct eeprom *e)
+void eeprom_ew_disable(struct eeprom *dev)
 {
-	digitalWrite(e->_pCS, HIGH);
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	send_bits(e, CONTROL<<e->_addr | EW_DISABLE<<(e->_addr-2), e->_addr + 2);
-	digitalWrite(e->_pCS, LOW);
-	e->_ew = false;
+	send_bits(dev, HIGH, 1);
+	send_bits(dev, CONTROL<<dev->_addr | EW_DISABLE<<(dev->_addr-2), dev->_addr + 2);
+	digitalWrite(dev->_pCS, LOW);
+	dev->_ew = false;
 }
 
 // Check Erase/Write Enable
-bool eeprom_is_ew_enabled(struct eeprom *e)
+bool eeprom_is_ew_enabled(struct eeprom *dev)
 {
-	return e->_ew;
+	return dev->_ew;
 }
 
 // Erase All Memory
 // Required Clock Cycle : 9-13
-void eeprom_erase_all(struct eeprom *e)
+void eeprom_erase_all(struct eeprom *dev)
 {
-	if(!eeprom_is_ew_enabled(e)) return;
-	digitalWrite(e->_pCS, HIGH);
+	if(!eeprom_is_ew_enabled(dev)) return;
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	//uint16_t value = CONTROL<<e->_addr | ERASE_ALL<<(e->_addr-2);
+	send_bits(dev, HIGH, 1);
+	//uint16_t value = CONTROL<<dev->_addr | ERASE_ALL<<(dev->_addr-2);
 	//printf("eeprom_erase_all value=%04x\n", value); 
-	send_bits(e, CONTROL<<e->_addr | ERASE_ALL<<(e->_addr-2), e->_addr + 2);
-	digitalWrite(e->_pCS, LOW);
-	wait_ready(e);
+	send_bits(dev, CONTROL<<dev->_addr | ERASE_ALL<<(dev->_addr-2), dev->_addr + 2);
+	digitalWrite(dev->_pCS, LOW);
+	wait_ready(dev);
 }
 
 // Erase Byte or Word
 // Required Clock Cycle : 9-13
-void eeprom_erase(struct eeprom *e, uint16_t addr)
+void eeprom_erase(struct eeprom *dev, uint16_t addr)
 {
-	if(!eeprom_is_ew_enabled(e)) return;
-	digitalWrite(e->_pCS, HIGH);
+	if(!eeprom_is_ew_enabled(dev)) return;
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	if(e->_org == EEPROM_MODE_16BIT) {
-		send_bits(e, ERASE<<e->_addr | (addr & e->_mask), e->_addr + 2);
+	send_bits(dev, HIGH, 1);
+	if(dev->_org == EEPROM_MODE_16BIT) {
+		send_bits(dev, ERASE<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
 	} else {
-		send_bits(e, ERASE<<e->_addr | (addr & e->_mask), e->_addr + 2);
+		send_bits(dev, ERASE<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
 	}
 	
-	digitalWrite(e->_pCS, LOW);
-	wait_ready(e);
+	digitalWrite(dev->_pCS, LOW);
+	wait_ready(dev);
 }
 
 
 // Write All Memory with same Data
 // Required Clock Cycle : 25-29
-void eeprom_write_all(struct eeprom *e, uint16_t value)
+void eeprom_write_all(struct eeprom *dev, uint16_t value)
 {
-	if(!eeprom_is_ew_enabled(e)) return;
-	digitalWrite(e->_pCS, HIGH);
+	if(!eeprom_is_ew_enabled(dev)) return;
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	send_bits(e, CONTROL<<e->_addr | WRITE_ALL<<(e->_addr-2), e->_addr + 2);
-	if(e->_org == EEPROM_MODE_16BIT) {
-		send_bits(e, 0xFFFF & value, 16);
+	send_bits(dev, HIGH, 1);
+	send_bits(dev, CONTROL<<dev->_addr | WRITE_ALL<<(dev->_addr-2), dev->_addr + 2);
+	if(dev->_org == EEPROM_MODE_16BIT) {
+		send_bits(dev, 0xFFFF & value, 16);
 	} else {
-		send_bits(e, 0xFF & value, 8);
+		send_bits(dev, 0xFF & value, 8);
 	}
-	digitalWrite(e->_pCS, LOW);
-	wait_ready(e);
+	digitalWrite(dev->_pCS, LOW);
+	wait_ready(dev);
 }
 
 // Write Data to Memory
 // Required Clock Cycle : 25-29
-void eeprom_write(struct eeprom *e, uint16_t addr, uint16_t value)
+void eeprom_write(struct eeprom *dev, uint16_t addr, uint16_t value)
 {
-	if(!eeprom_is_ew_enabled(e)) return;
-	digitalWrite(e->_pCS, HIGH);
+	if(!eeprom_is_ew_enabled(dev)) return;
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);
-	if(e->_org == EEPROM_MODE_16BIT) {
-		send_bits(e, WRITE<<e->_addr | (addr & e->_mask), e->_addr + 2);
-		send_bits(e, 0xFFFF & value, 16);
+	send_bits(dev, HIGH, 1);
+	if(dev->_org == EEPROM_MODE_16BIT) {
+		send_bits(dev, WRITE<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
+		send_bits(dev, 0xFFFF & value, 16);
 	} else {
-		send_bits(e, WRITE<<e->_addr | (addr & e->_mask), e->_addr + 2);
-		send_bits(e, 0xFF & value, 8);
+		send_bits(dev, WRITE<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
+		send_bits(dev, 0xFF & value, 8);
 	}
-	digitalWrite(e->_pCS, LOW);
-	wait_ready(e);
+	digitalWrite(dev->_pCS, LOW);
+	wait_ready(dev);
 }
 
 // Read Data from Memory
-uint16_t eeprom_read(struct eeprom *e, uint16_t addr)
+uint16_t eeprom_read(struct eeprom *dev, uint16_t addr)
 {
 	uint16_t val = 0;
-	digitalWrite(e->_pCS, HIGH);
+	digitalWrite(dev->_pCS, HIGH);
 	usleep(DELAY_CS);
-	send_bits(e, HIGH, 1);	// Start bit
+	send_bits(dev, HIGH, 1);	// Start bit
 	
 	int amtBits;
-	if(e->_org == EEPROM_MODE_16BIT) {
-		send_bits(e, READ<<e->_addr | (addr & e->_mask), e->_addr + 2);
+	if(dev->_org == EEPROM_MODE_16BIT) {
+		send_bits(dev, READ<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
 		amtBits = 16;
 	} else {
-		send_bits(e, READ<<e->_addr | (addr & e->_mask), e->_addr + 2);
+		send_bits(dev, READ<<dev->_addr | (addr & dev->_mask), dev->_addr + 2);
 		amtBits = 8;
 	}
 	// Read bits
 	for(int i = amtBits; i>0; i--) {
-		digitalWrite(e->_pSK, HIGH);
+		digitalWrite(dev->_pSK, HIGH);
 		usleep(DELAY_READ);
-		int in = digitalRead(e->_pDO) ? 1 : 0;
-		digitalWrite(e->_pSK, LOW);
+		int in = digitalRead(dev->_pDO) ? 1 : 0;
+		digitalWrite(dev->_pSK, LOW);
 		usleep(DELAY_READ);
 		val |= (in << (i-1));
 	}
-	digitalWrite(e->_pCS, LOW);
+	digitalWrite(dev->_pCS, LOW);
 	return val;
 }
 
 
-static void send_bits(struct eeprom *e, uint16_t value, int len)
+static void send_bits(struct eeprom *dev, uint16_t value, int len)
 {
 	if(_DEBUG_) printf("send_bits value=0x%04x len=%d\n",value, len);
 	for(int i = len-1; i>=0; i--)
 	{
 		bool toSend = (value & 1<<i);
 		// Send bit
-		if (toSend) digitalWrite(e->_pDI, HIGH);
-		if (!toSend) digitalWrite(e->_pDI, LOW);
+		if (toSend) digitalWrite(dev->_pDI, HIGH);
+		if (!toSend) digitalWrite(dev->_pDI, LOW);
 		usleep(DELAY_WRITE);
-		digitalWrite(e->_pSK, HIGH);
+		digitalWrite(dev->_pSK, HIGH);
 		usleep(DELAY_WRITE);
-		digitalWrite(e->_pSK, LOW);
+		digitalWrite(dev->_pSK, LOW);
 		usleep(DELAY_WRITE);
 	}
 }
 
-static void wait_ready(struct eeprom *e)
+static void wait_ready(struct eeprom *dev)
 {
 	//Wait until action is done.
-	digitalWrite(e->_pCS, HIGH);
-	while(digitalRead(e->_pDO) != HIGH) {
+	digitalWrite(dev->_pCS, HIGH);
+	while(digitalRead(dev->_pDO) != HIGH) {
 		usleep(DELAY_WAIT);
 	}
-	digitalWrite(e->_pCS, LOW);
+	digitalWrite(dev->_pCS, LOW);
 }
 
 

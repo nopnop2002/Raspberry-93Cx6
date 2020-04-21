@@ -57,31 +57,31 @@ sudo ./main
 // Open Memory Device
 // model:EEPROM model(46/56/66/76/86)
 // org:Organization Select(1=8Bit/2=16Bit)
-int eeprom_open(int model, int org, int pCS, int pSK, int pDI, int pDO, struct eeprom*);
+int eeprom_open(int model, int org, int pCS, int pSK, int pDI, int pDO, struct eeprom *dev);
 
 // Erase/Write Enable
-void eeprom_ew_enable(struct eeprom *e);
+void eeprom_ew_enable(struct eeprom *dev);
 
 // Erase/Write Disable
-void eeprom_ew_disable(struct eeprom *e);
+void eeprom_ew_disable(struct eeprom *dev);
 
 // Check Erase/Write Enable
-bool eeprom_is_ew_enabled(struct eeprom *e);
+bool eeprom_is_ew_enabled(struct eeprom *dev);
 
 // Erase All Memory
-void eeprom_erase_all(struct eeprom *e);
+void eeprom_erase_all(struct eeprom *dev);
 
 // Erase Byte or Word
-void eeprom_erase(struct eeprom *e, uint16_t addr)
+void eeprom_erase(struct eeprom *dev, uint16_t addr)
 
 // Write All Memory with same Data
-void eeprom_write_all(struct eeprom *e, uint16_t value)
+void eeprom_write_all(struct eeprom *dev, uint16_t value)
 
 // Write Data to Memory
-void eeprom_write(struct eeprom *e, uint16_t addr, uint16_t value)
+void eeprom_write(struct eeprom *dev, uint16_t addr, uint16_t value)
 
 // Read Data from Memory
-uint16_t eeprom_read(struct eeprom *e, uint16_t addr)
+uint16_t eeprom_read(struct eeprom *dev, uint16_t addr)
 ```
 
 ---
@@ -99,22 +99,21 @@ uint16_t eeprom_read(struct eeprom *e, uint16_t addr)
 ---
 
 # 93C46
-![93C46-BYTE](https://user-images.githubusercontent.com/6020549/61050500-1a623d80-a422-11e9-82ad-d5a35fd970b2.jpg)   
+![93c46-byte](https://user-images.githubusercontent.com/6020549/79822923-507b1780-83cd-11ea-8c69-e5ed2dfcc444.jpg)
 
-![93C46-WORD](https://user-images.githubusercontent.com/6020549/61050499-1a623d80-a422-11e9-98d7-4397111388d4.jpg)   
+![93c46-word](https://user-images.githubusercontent.com/6020549/79822955-67216e80-83cd-11ea-8c95-5962a9612bc3.jpg)
 
 # 93C56
-![93C56-BYTE](https://user-images.githubusercontent.com/6020549/61050528-2cdc7700-a422-11e9-85e2-3d3f18f0adc0.jpg)   
+![93c56-byte](https://user-images.githubusercontent.com/6020549/79822962-6a1c5f00-83cd-11ea-902b-dc8e95b56de0.jpg)
 
-![93C56-WORD](https://user-images.githubusercontent.com/6020549/61050527-2cdc7700-a422-11e9-861f-92315ff3e916.jpg)   
+![93c56-word](https://user-images.githubusercontent.com/6020549/79822965-6c7eb900-83cd-11ea-9c7b-294f9a30f2cb.jpg)
 
 # 93C66
-![93C66-BYTE](https://user-images.githubusercontent.com/6020549/61050568-441b6480-a422-11e9-9db8-b84fe4faebac.jpg)   
+![93c66-byte](https://user-images.githubusercontent.com/6020549/79822968-6f79a980-83cd-11ea-915b-83649c084351.jpg)
 
-![93C66-WORD](https://user-images.githubusercontent.com/6020549/61050569-441b6480-a422-11e9-8897-1637ee88b8cd.jpg)   
+![93c66-word](https://user-images.githubusercontent.com/6020549/79822975-72749a00-83cd-11ea-8d93-b8e34b0acac7.jpg)
 
 # 93C86
-![93C86-BYTE](https://user-images.githubusercontent.com/6020549/61335031-f611c100-a866-11e9-8e67-1a6788219154.jpg)
+![93c86-byte](https://user-images.githubusercontent.com/6020549/79822986-76a0b780-83cd-11ea-8963-88009dccdb8c.jpg)
 
-![93C86-WORD](https://user-images.githubusercontent.com/6020549/61335032-f9a54800-a866-11e9-9235-82821062c239.jpg)
-
+![93c86-word](https://user-images.githubusercontent.com/6020549/79822989-799ba800-83cd-11ea-8e6d-02bad90bcdd4.jpg)

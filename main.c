@@ -52,96 +52,103 @@ void dump(char * title, int bits, uint16_t *dt, uint16_t n) {
   printf("-------------------- [%s] --------------------\n", title);
 }
 
-void org8Mode(struct eeprom * e) {
+void org8Mode(struct eeprom * dev, int bytes) {
   uint16_t mem_addr;
   uint16_t data;
   uint16_t rdata[128];
   int i;
 
   // erase/write enable
-  eeprom_ew_enable(e);
+  eeprom_ew_enable(dev);
 
   // erase all memory
-  eeprom_erase_all(e);
+  eeprom_erase_all(dev);
 
   // write same data
-  eeprom_write_all(e, 0x00);
+  eeprom_write_all(dev, 0x00);
 
+#if 0
   // read first blcok 8bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<128;i++) {
     mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
   dump("8bit:address 0-128", 8, rdata, 128);
+#endif
 
   // write first blcok 8bit mode
   for(i=0;i<128;i++) {
     mem_addr = i;
     data = i;
-    eeprom_write(e, mem_addr, data);
+    eeprom_write(dev, mem_addr, data);
   }
 
   // read first blcok 8bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<128;i++) {
     mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
   dump("8bit:address 0-128", 8, rdata, 128);
 
-  // write first blcok 8bit mode
+  // write last blcok 8bit mode
   for(i=0;i<128;i++) {
-    mem_addr = i;
+    mem_addr = bytes - i;
     data = 128-i;
-    eeprom_write(e, mem_addr, data);
+    eeprom_write(dev, mem_addr, data);
   }
 
-  // read first blcok 8bit mode
+  // read last blcok 8bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<128;i++) {
-    mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    mem_addr = bytes - i;
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
-  dump("8bit:address 0-128", 8, rdata, 128);
+  char title[64];
+  sprintf(title,"8bit:address %d-%d", bytes-128, bytes);
+  //dump("8bit:address 0-128", 8, rdata, 128);
+  dump(title, 8, rdata, 128);
 
 }
 
-void org16Mode(struct eeprom * e) {
+void org16Mode(struct eeprom * dev, int bytes) {
   uint16_t mem_addr;
   uint16_t data;
   uint16_t rdata[128];
   int i;
 
   // erase/write enable
-  eeprom_ew_enable(e);
+  eeprom_ew_enable(dev);
 
   // erase all memory
-  eeprom_erase_all(e);
+  eeprom_erase_all(dev);
 
   // write same data
-  eeprom_write_all(e, 0x00);
+  eeprom_write_all(dev, 0x00);
 
+#if 0
   // read first blcok 16bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<64;i++) {
     mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
   dump("16bit:address 0-64", 16, rdata, 64);
+#endif
 
   // write first blcok 16bit mode
   for(i=0;i<64;i++) {
     mem_addr = i;
     data = i + 0xFF00;
-    eeprom_write(e, mem_addr, data);
+    eeprom_write(dev, mem_addr, data);
   }
 
   // read last blcok 16bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<64;i++) {
     mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
   dump("16bit:address 0-64", 16, rdata, 64);
 
@@ -149,16 +156,19 @@ void org16Mode(struct eeprom * e) {
   for(i=0;i<64;i++) {
     mem_addr = i;
     data = 0xFFFF - i;
-    eeprom_write(e, mem_addr, data);
+    eeprom_write(dev, mem_addr, data);
   }
 
   // read last blcok 16bit mode
   memset(rdata, 0, sizeof(rdata));
   for(i=0;i<64;i++) {
     mem_addr = i;
-    rdata[i] = eeprom_read(e, mem_addr);
+    rdata[i] = eeprom_read(dev, mem_addr);
   }
-  dump("16bit:address 0-64", 16, rdata, 64);
+  char title[64];
+  sprintf(title,"16bit:address %d-%d", bytes-64, bytes);
+  //dump("16bit:address 0-64", 16, rdata, 64);
+  dump(title, 16, rdata, 64);
 
 }
 
@@ -207,10 +217,14 @@ int main(int argc, char *argv[])
   }
 
   // open device
-  struct eeprom e;
-  int eeprom_bytes = eeprom_open(eeprom_model, eeprom_org, pCS, pSK, pDI, pDO, &e);
-  printf("EEPROM chip=93C%02d, %dBit Organization, Total=%dByte\n",eeprom_model, bits, eeprom_bytes);
+  struct eeprom dev;
+  int eeprom_bytes = eeprom_open(eeprom_model, eeprom_org, pCS, pSK, pDI, pDO, &dev);
+  if (eeprom_org == EEPROM_MODE_8BIT) {
+    printf("EEPROM chip=93C%02d, %dBit Organization, Total=%dBytes\n",eeprom_model, bits, eeprom_bytes);
+  } else {
+    printf("EEPROM chip=93C%02d, %dBit Organization, Total=%dWords\n",eeprom_model, bits, eeprom_bytes);
+  }
 
-  if (eeprom_org == EEPROM_MODE_8BIT) org8Mode(&e);
-  if (eeprom_org == EEPROM_MODE_16BIT) org16Mode(&e);
+  if (eeprom_org == EEPROM_MODE_8BIT) org8Mode(&dev, eeprom_bytes);
+  if (eeprom_org == EEPROM_MODE_16BIT) org16Mode(&dev, eeprom_bytes);
 }
