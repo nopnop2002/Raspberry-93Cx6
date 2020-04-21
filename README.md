@@ -72,16 +72,16 @@ bool eeprom_is_ew_enabled(struct eeprom *e);
 void eeprom_erase_all(struct eeprom *e);
 
 // Erase Byte or Word
-void eeprom_erase(struct eeprom *e, __u16 addr);
+void eeprom_erase(struct eeprom *e, uint16_t addr)
 
 // Write All Memory with same Data
-void eeprom__write_all(struct eeprom *e, __u16 value);
+void eeprom_write_all(struct eeprom *e, uint16_t value)
 
 // Write Data to Memory
-void eeprom_write(struct eeprom *e, __u16 addr, __u16 value);
+void eeprom_write(struct eeprom *e, uint16_t addr, uint16_t value)
 
 // Read Data from Memory
-__u16 eeprom_read(struct eeprom *e, __u16 addr);
+uint16_t eeprom_read(struct eeprom *e, uint16_t addr)
 ```
 
 ---
@@ -92,9 +92,9 @@ __u16 eeprom_read(struct eeprom *e, __u16 addr);
 # Wireing for x16 Organization
 ![Wire-93cx6-word](https://user-images.githubusercontent.com/6020549/61050458-00c0f600-a422-11e9-9720-1d12b4431962.jpg)
 
-**It's insufficient in 3.3V Power supply.**
-**You have to supply 5V.**
-**So you have to shift level about MISO line.**
+**It's insufficient in 3.3V Power supply.**   
+**You have to supply 5V.**   
+**So you have to shift level about MISO line.**   
 
 ---
 
