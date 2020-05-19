@@ -30,6 +30,12 @@ When Organization Select (ORG) is connected to Ground (VSS) the x8 organization 
 
 ---
 
+# Software requirement
+
+WiringPi Library   
+
+---
+
 # Build
 for 93C46   
 cc -o main main.c 93Cx6.c -lwiringPi -DC46 [-DWORD/-DBYTE]
