@@ -119,6 +119,11 @@ uint16_t eeprom_read(struct eeprom *dev, uint16_t addr)
 
 ![93c66-word](https://user-images.githubusercontent.com/6020549/79822975-72749a00-83cd-11ea-8d93-b8e34b0acac7.jpg)
 
+# 93C76
+![93c76-byte](https://user-images.githubusercontent.com/6020549/83958191-f44f5280-a8a9-11ea-8b08-1fa633c7beaf.jpg)
+
+![93c76-word](https://user-images.githubusercontent.com/6020549/83958192-f74a4300-a8a9-11ea-9a48-b98d4028e6eb.jpg)
+
 # 93C86
 ![93c86-byte](https://user-images.githubusercontent.com/6020549/79822986-76a0b780-83cd-11ea-8963-88009dccdb8c.jpg)
 
